@@ -1,6 +1,11 @@
 const express = require('express');
 const app = express();
+const cors = require('cors')
 const port = process.env.PORT || 5000;
+
+// middleware
+app.use(cors())
+app.use(express.json())
 
 // probeshn
 // 8zucyPgAfo6DbPoA
@@ -28,6 +33,19 @@ async function run() {
 
     app.get("/",(req,res)=>{
         res.send("Hi Home page")
+    })
+
+    app.get("/products",(req,res)=>{
+        const cursor = database.find();
+        const products = cursor.toArray();
+        res.send(products)
+    })
+
+    app.post("/products", async (req,res)=>{
+      const product = req.body;
+      console.log(product)
+      const result = await database.insertOne(product)
+      res.send(result)
     })
 
 
