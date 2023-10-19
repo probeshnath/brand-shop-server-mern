@@ -35,9 +35,9 @@ async function run() {
         res.send("Hi Home page")
     })
 
-    app.get("/products",(req,res)=>{
+    app.get("/products", async (req,res)=>{
         const cursor = database.find();
-        const products = cursor.toArray();
+        const products = await cursor.toArray();
         res.send(products)
     })
 
