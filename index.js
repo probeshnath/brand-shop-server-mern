@@ -56,6 +56,35 @@ async function run() {
       res.send(result)
     })
 
+    app.put("/products/:id",async (req,res)=>{
+      const id = req.params.id;
+      const product = req.body;
+      // console.log(id,product)
+      const filter = {_id: new ObjectId(id)}
+      const options = {upsert:true}
+      const updateProducts = {
+        $set:{
+          productName: product.productName,
+          description: product.description,
+          productImg: product.productImg,
+          price: product.price,
+          brandName: product.brandName,
+          rating: product.rating,
+          category: product.category
+        }
+      }
+      const result = await database.updateOne(filter,updateProducts,options)
+      res.send(result)
+    })
+
+    // delete
+    app.delete("/products/:id",async (req,res)=>{
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await database.deleteOne(query)
+      res.send(result)
+    })
+
 
 
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
