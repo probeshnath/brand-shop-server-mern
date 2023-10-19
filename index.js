@@ -11,7 +11,7 @@ app.use(express.json())
 // 8zucyPgAfo6DbPoA
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = "mongodb+srv://probeshn:8zucyPgAfo6DbPoA@cluster0.6kl1jhy.mongodb.net/?retryWrites=true&w=majority";
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -40,6 +40,14 @@ async function run() {
         const products = await cursor.toArray();
         res.send(products)
     })
+
+    app.get("/products/:id", async (req,res)=>{
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const product = await database.findOne(query);
+      // const products = await cursor.toArray();
+      res.send(product)
+  })
 
     app.post("/products", async (req,res)=>{
       const product = req.body;
