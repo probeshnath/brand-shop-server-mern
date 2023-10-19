@@ -86,6 +86,17 @@ async function run() {
     })
 
 
+    // for cart
+    const cartDB = client.db("brandDB").collection("carts");
+
+    app.post("/cart",async(req,res)=>{
+      const cart = req.body;
+      const result = await cartDB.insertOne(cart)
+      // console.log(cart)
+      res.send(result)
+    })
+
+
 
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
