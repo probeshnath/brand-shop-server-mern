@@ -49,6 +49,14 @@ async function run() {
       res.send(product)
   })
 
+  app.get("/product/:brand", async (req,res)=>{
+    const brand = req.params.brand;
+    const searchBrand = {brandName: brand}
+    const result = database.find(searchBrand)
+    res.send(result)
+    
+  })
+
     app.post("/products", async (req,res)=>{
       const product = req.body;
       console.log(product)
@@ -89,10 +97,25 @@ async function run() {
     // for cart
     const cartDB = client.db("brandDB").collection("carts");
 
+    app.get("/cart", async(req,res)=>{
+      const cursor = cartDB.find()
+      const result =await cursor.toArray();
+      res.send(result)
+    })
+
     app.post("/cart",async(req,res)=>{
       const cart = req.body;
       const result = await cartDB.insertOne(cart)
       // console.log(cart)
+      res.send(result)
+    })
+
+     // delete
+    app.delete("/cart/:productId",async (req,res)=>{
+      const id = req.params.productId;
+      console.log(id)
+      const query = {_id: new ObjectId(id)}
+      const result = await cartDB.deleteOne(query)
       res.send(result)
     })
 
